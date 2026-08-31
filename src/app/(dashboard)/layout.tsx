@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Zap, LayoutDashboard, Dumbbell, Utensils, TrendingUp, Bot, Users, UserCircle, Search, Bell, Menu, X, LogOut, Sparkles } from "lucide-react";
@@ -22,6 +22,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  // Global Ctrl + K / Cmd + K shortcut to toggle Smart Search AI
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <AdaptiveUIProvider>
@@ -112,7 +124,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Bell size={20} />
                 <span style={{ position: "absolute", top: 6, right: 6, width: 8, height: 8, borderRadius: "50%", background: "var(--accent-red)" }} />
               </button>
-              <div className="topbar-avatar" style={{ background: "var(--gradient-primary)", fontWeight: 800 }}>K</div>
+              <Link
+                href="/profile"
+                className="topbar-avatar"
+                style={{
+                  background: "var(--gradient-primary)",
+                  fontWeight: 800,
+                  textDecoration: "none",
+                  color: "#fff",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  transition: "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease",
+                }}
+                title="Your Profile & Account Settings"
+              >
+                K
+              </Link>
             </div>
           </header>
           <main className="page-content animate-fade">
