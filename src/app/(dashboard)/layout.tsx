@@ -78,11 +78,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             ))}
           </nav>
           <div className="sidebar-footer">
-            <Link href="/" className="sidebar-link" onClick={() => {
+            <Link href="/login" className="sidebar-link" onClick={() => {
               document.cookie = "demo_mode=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
             }}>
               <LogOut size={20} className="icon" />
-              Sign Out
+              Sign Out / Switch Account
             </Link>
           </div>
         </aside>

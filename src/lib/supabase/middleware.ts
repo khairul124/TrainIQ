@@ -52,8 +52,8 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Redirect authenticated users away from auth pages
-  if ((user || isDemo) && (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup')) {
+  // Redirect authenticated Supabase users away from auth pages (allow direct access to login/signup for switching accounts or logging in)
+  if (user && (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup')) {
     const url = request.nextUrl.clone();
     url.pathname = '/dashboard';
     return NextResponse.redirect(url);
