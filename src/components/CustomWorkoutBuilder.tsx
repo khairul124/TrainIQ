@@ -7,6 +7,7 @@ import {
 import { getAllExercises, WorkoutExercise, getFormImage } from "@/lib/workoutData";
 import { VoiceReadButton } from "@/components/VoiceButton";
 import { VoiceSystem } from "@/lib/voiceSystem";
+import { GoogleSheetsService } from "@/lib/googleSheetsService";
 
 export interface CustomExerciseItem {
   id: string;
@@ -330,11 +331,33 @@ export function CustomWorkoutBuilder() {
     setHistory(updatedHistory);
     localStorage.setItem("fitnessgpt_workout_history", JSON.stringify(updatedHistory));
 
+    // Auto-sync completed exercises with sets, reps, weight to Google Sheets
+    activeDay.exercises.forEach(ex => {
+      const sets = sessionLogs[ex.id] || [];
+      const completedSets = sets.filter(s => s.completed);
+      if (completedSets.length > 0) {
+        const repsString = completedSets.map(s => s.repsDone).join(", ");
+        const maxWeight = Math.max(...completedSets.map(s => s.weightKg));
+        const exerciseVolume = completedSets.reduce((sum, s) => sum + s.repsDone * s.weightKg, 0);
+
+        GoogleSheetsService.logWorkout({
+          date: new Date().toISOString().split("T")[0],
+          workoutName: activeDay.dayName,
+          exerciseName: ex.name,
+          sets: completedSets.length,
+          reps: repsString,
+          weightKg: maxWeight,
+          totalVolumeKg: exerciseVolume,
+          notes: `${mins} min session`,
+        });
+      }
+    });
+
     setActiveSessionDayId(null);
     setActiveTab("history");
 
     VoiceSystem.speak(`Great job! Workout complete in ${mins} minutes. You burned approximately ${estimatedCal} calories with a total volume of ${totalVolume} kilograms.`);
-    showToast(`🏆 Workout Saved! ${mins} min • ${estimatedCal} cal • ${totalVolume} kg volume`);
+    showToast(`🏆 Workout Saved & Synced to Google Sheets! ${mins} min • ${estimatedCal} cal • ${totalVolume} kg`);
   };
 
   // Filtering for Exercise Picker

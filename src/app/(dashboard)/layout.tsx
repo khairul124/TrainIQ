@@ -8,6 +8,8 @@ import { MagicMouse } from "@/components/MagicMouse";
 import { OnboardingAgent } from "@/components/OnboardingAgent";
 import { SmartSearchModal } from "@/components/SmartSearchModal";
 
+import { GoogleSheetsSyncBadge } from "@/components/GoogleSheetsSyncBadge";
+
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/workouts", label: "Workouts", icon: Dumbbell },
@@ -105,6 +107,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </div>
             </div>
             <div className="topbar-actions" style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              {/* Google Sheets Live Sync Badge */}
+              <GoogleSheetsSyncBadge />
+
               {/* Connected Wearables Badge */}
               <div style={{
                 display: "flex", alignItems: "center", gap: 6,

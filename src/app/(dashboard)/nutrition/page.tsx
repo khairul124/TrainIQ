@@ -17,6 +17,7 @@ import { VoiceReadButton } from "@/components/VoiceButton";
 import { VoiceSystem } from "@/lib/voiceSystem";
 import { FoodPhotoAnalyzer } from "@/components/FoodPhotoAnalyzer";
 import { BarcodeScanner } from "@/components/BarcodeScanner";
+import { GoogleSheetsService } from "@/lib/googleSheetsService";
 
 // ──────────────────────────────────────────────
 // Logged Meal interface (for manual tracker)
@@ -194,12 +195,39 @@ export default function NutritionPage() {
       budget_tier: "standard",
     };
     setLoggedMeals(prev => [newLogged, ...prev]);
+
+    // Auto-sync scanned meal to Google Sheets
+    const capitalizedMeal = (food.mealType.charAt(0).toUpperCase() + food.mealType.slice(1)) as "Breakfast" | "Lunch" | "Dinner" | "Snack";
+    GoogleSheetsService.logNutrition({
+      date: new Date().toISOString().split("T")[0],
+      mealType: capitalizedMeal,
+      foodItem: food.name,
+      calories: food.calories,
+      proteinG: food.protein,
+      carbsG: food.carbs,
+      fatsG: food.fat,
+      source: "Photo Vision AI",
+    });
   };
 
   const handleGeneratePlan = () => {
     const profile: UserProfile = { heightCm, weightKg, age, gender, activityLevel, goal };
     const plans = generateDietPlans(profile);
     setGeneratedPlans(plans);
+
+    // Auto-sync AI Diet Plan to Google Sheets
+    if (plans.standard) {
+      GoogleSheetsService.logDietPlan({
+        date: new Date().toISOString().split("T")[0],
+        goal: goal === "build_muscle" ? "Muscle Gain" : goal === "lose_weight" ? "Fat Loss" : "Maintenance",
+        dailyCalories: plans.standard.totalCalories,
+        proteinTargetG: plans.standard.totalProtein,
+        carbsTargetG: plans.standard.totalCarbs,
+        fatsTargetG: plans.standard.totalFat,
+        mealBreakdown: plans.standard.meals.map(m => `${m.label}: ${m.totalCalories} kcal (${m.items.map(i => i.name).join(", ")})`).join(" | "),
+        regionalFoods: "Standard & Economy regional staple options",
+      });
+    }
   };
 
   const handleAddCustomFood = (e: React.FormEvent) => {
@@ -231,6 +259,19 @@ export default function NutritionPage() {
     };
     setLoggedMeals([...loggedMeals, newLogged]);
     setLoggingFoodId(null);
+
+    // Auto-sync manual meal to Google Sheets
+    const capitalizedMeal = (mealType.charAt(0).toUpperCase() + mealType.slice(1)) as "Breakfast" | "Lunch" | "Dinner" | "Snack";
+    GoogleSheetsService.logNutrition({
+      date: new Date().toISOString().split("T")[0],
+      mealType: capitalizedMeal,
+      foodItem: food.name,
+      calories: food.calories,
+      proteinG: food.protein_g || 0,
+      carbsG: food.carbs_g || 0,
+      fatsG: food.fat_g || 0,
+      source: "Manual",
+    });
   };
 
   const handleDeleteLoggedMeal = (id: string) => {
