@@ -59,8 +59,7 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        <h1>Welcome Back</h1>
-        <p className="subtitle">Sign in to your Liquid Glass AI Portal</p>
+        <h1>Welcome to Deadzone</h1>
 
         {!isSupabaseConfigured() && (
           <div style={{ 

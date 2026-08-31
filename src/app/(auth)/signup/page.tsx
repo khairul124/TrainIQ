@@ -82,7 +82,7 @@ export default function SignupPage() {
         </div>
 
         <h1>Create Account</h1>
-        <p className="subtitle">Start your Liquid Glass AI fitness journey</p>
+        <p className="subtitle">Start your AI fitness journey</p>
 
         {!isSupabaseConfigured() && (
           <div style={{ 
