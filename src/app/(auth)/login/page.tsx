@@ -114,21 +114,7 @@ export default function LoginPage() {
           <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.08)" }} />
         </div>
 
-        {!isSupabaseConfigured() && (
-          <div style={{ 
-            background: "rgba(108,99,255,0.12)", 
-            border: "1px solid rgba(108,99,255,0.3)", 
-            borderRadius: 12, 
-            padding: "12px 16px", 
-            color: "#A29BFF", 
-            fontSize: "0.85rem", 
-            marginBottom: 20,
-            textAlign: "center",
-            backdropFilter: "blur(10px)"
-          }}>
-            ⚡ Running in Demo Mode (Supabase Auth optional)
-          </div>
-        )}
+
 
         {error && (
           <div style={{
