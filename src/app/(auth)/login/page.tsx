@@ -19,9 +19,8 @@ export default function LoginPage() {
     setLoading(true); setError("");
 
     if (!isSupabaseConfigured()) {
-      // Set demo mode cookie
-      document.cookie = "demo_mode=true; path=/; max-age=86400";
-      router.push("/dashboard");
+      setError("⚠️ Supabase authentication is not configured yet. Please add your real NEXT_PUBLIC_SUPABASE_URL in .env.local, or click 'Instant Demo Mode Access' below to test.");
+      setLoading(false);
       return;
     }
 
@@ -30,16 +29,18 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) { setError(error.message); setLoading(false); return; }
       router.push("/dashboard");
-    } catch { setError("Something went wrong"); setLoading(false); }
+    } catch { setError("Something went wrong during sign in"); setLoading(false); }
   };
 
   const handleGoogleLogin = async () => {
-    setLoading(true);
+    setLoading(true); setError("");
+
     if (!isSupabaseConfigured()) {
-      document.cookie = "demo_mode=true; path=/; max-age=86400";
-      router.push("/dashboard");
+      setError("⚠️ Google OAuth requires your real Supabase credentials. Please set your Supabase project in .env.local and enable Google Provider in Supabase dashboard, or use 'Instant Demo Mode Access' below.");
+      setLoading(false);
       return;
     }
+
     try {
       const supabase = createClient();
       await supabase.auth.signInWithOAuth({
