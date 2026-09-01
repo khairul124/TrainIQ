@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Zap, Mail, Lock, Eye, EyeOff, Sparkles, ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { isSupabaseConfigured } from "@/lib/dbService";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -18,28 +17,16 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true); setError("");
 
-    if (!isSupabaseConfigured()) {
-      setError("⚠️ Supabase authentication is not configured yet. Please add your real NEXT_PUBLIC_SUPABASE_URL in .env.local, or click 'Instant Demo Mode Access' below to test.");
-      setLoading(false);
-      return;
-    }
-
     try {
       const supabase = createClient();
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) { setError(error.message); setLoading(false); return; }
       router.push("/dashboard");
-    } catch { setError("Something went wrong during sign in"); setLoading(false); }
+    } catch { setError("Something went wrong during sign in. Please check your Supabase configuration."); setLoading(false); }
   };
 
   const handleGoogleLogin = async () => {
     setLoading(true); setError("");
-
-    if (!isSupabaseConfigured()) {
-      setError("⚠️ Google OAuth requires your real Supabase credentials. Please set your Supabase project in .env.local and enable Google Provider in Supabase dashboard, or use 'Instant Demo Mode Access' below.");
-      setLoading(false);
-      return;
-    }
 
     try {
       const supabase = createClient();
