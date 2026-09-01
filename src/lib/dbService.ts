@@ -19,7 +19,7 @@ export function isSupabaseConfigured(): boolean {
     url.startsWith('https://') && 
     !url.includes('your-project-id') && 
     key && 
-    key.length > 50 && 
+    key.length > 20 && 
     !key.includes('dummy-payload')
   );
 }
