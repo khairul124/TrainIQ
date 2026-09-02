@@ -4,9 +4,9 @@ import "./globals.css";
 import { SmoothRouteLoader } from "@/components/SmoothRouteLoader";
 
 export const metadata: Metadata = {
-  title: "TrainIQ — AI-Powered Personal Fitness Platform",
-  description: "The future of fitness starts here. Track workouts, analyse nutrition, monitor WHOOP/Oura recovery, and get AI-powered coaching.",
-  keywords: ["TrainIQ", "fitness", "AI", "workout", "nutrition", "Oura", "WHOOP", "Apple Health", "Google Fit"],
+  title: "TrainIQ — Train Smarter. Perform Better.",
+  description: "An AI-powered fitness platform built around your workouts, nutrition, recovery, and real performance data. Your training. Your data. Your edge.",
+  keywords: ["TrainIQ", "fitness", "AI coach", "performance", "progressive overload", "strength", "nutrition", "Google Sheets"],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
