@@ -22,7 +22,7 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) { setError(error.message); setLoading(false); return; }
       router.push("/dashboard");
-    } catch { setError("Something went wrong during sign in. Please check your Supabase configuration."); setLoading(false); }
+    } catch (err: unknown) { setError(err instanceof Error ? err.message : "Something went wrong during sign in."); setLoading(false); }
   };
 
   const handleGoogleLogin = async () => {

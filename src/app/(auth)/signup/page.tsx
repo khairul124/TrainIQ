@@ -23,7 +23,7 @@ export default function SignupPage() {
       const { error } = await supabase.auth.signUp({ email, password, options: { data: { full_name: name } } });
       if (error) { setError(error.message); setLoading(false); return; }
       router.push("/dashboard");
-    } catch { setError("Something went wrong during account creation. Please check your Supabase configuration."); setLoading(false); }
+    } catch (err: unknown) { setError(err instanceof Error ? err.message : "Something went wrong during account creation."); setLoading(false); }
   };
 
   const handleGoogleSignup = async () => {
