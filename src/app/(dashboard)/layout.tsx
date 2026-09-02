@@ -9,6 +9,7 @@ import { OnboardingAgent } from "@/components/OnboardingAgent";
 import { SmartSearchModal } from "@/components/SmartSearchModal";
 
 import { GoogleSheetsSyncBadge } from "@/components/GoogleSheetsSyncBadge";
+import { createClient } from "@/lib/supabase/client";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -24,6 +25,69 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  // Dynamic User Profile State
+  const [userName, setUserName] = useState("Athlete");
+  const [userInitial, setUserInitial] = useState("A");
+  const [userAvatar, setUserAvatar] = useState<string | null>(null);
+
+  // Load Real User Identity & Avatar
+  useEffect(() => {
+    async function loadUserIdentity() {
+      try {
+        const savedCustomName = localStorage.getItem("trainiq_user_fullname");
+        const savedAvatar = localStorage.getItem("trainiq_user_avatar");
+        if (savedAvatar) setUserAvatar(savedAvatar);
+
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (user) {
+          const meta = user.user_metadata || {};
+          const resolvedName =
+            savedCustomName ||
+            meta.full_name ||
+            meta.name ||
+            (user.email ? user.email.split("@")[0].replace(/[._]/g, " ") : "Athlete");
+          
+          const formatted = resolvedName.charAt(0).toUpperCase() + resolvedName.slice(1);
+          setUserName(formatted);
+          setUserInitial(formatted.trim().charAt(0).toUpperCase() || "A");
+
+          if (!savedAvatar && (meta.avatar_url || meta.picture)) {
+            setUserAvatar(meta.avatar_url || meta.picture);
+          }
+        } else if (savedCustomName) {
+          setUserName(savedCustomName);
+          setUserInitial(savedCustomName.trim().charAt(0).toUpperCase() || "A");
+        }
+      } catch (err) {
+        console.error("Failed to load user in topbar:", err);
+      }
+    }
+
+    loadUserIdentity();
+
+    // Listen for custom profile update events
+    const handleProfileUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail) {
+        if (customEvent.detail.name) {
+          const formatted = customEvent.detail.name.charAt(0).toUpperCase() + customEvent.detail.name.slice(1);
+          setUserName(formatted);
+          setUserInitial(formatted.trim().charAt(0).toUpperCase() || "A");
+        }
+        if (customEvent.detail.avatar !== undefined) {
+          setUserAvatar(customEvent.detail.avatar);
+        }
+      } else {
+        loadUserIdentity();
+      }
+    };
+
+    window.addEventListener("trainiq-profile-updated", handleProfileUpdate);
+    return () => window.removeEventListener("trainiq-profile-updated", handleProfileUpdate);
+  }, []);
 
   // Global Ctrl + K / Cmd + K shortcut to toggle Smart Search AI
   useEffect(() => {
@@ -133,18 +197,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 href="/profile"
                 className="topbar-avatar"
                 style={{
-                  background: "var(--gradient-primary)",
+                  background: userAvatar ? "transparent" : "var(--gradient-primary)",
                   fontWeight: 800,
                   textDecoration: "none",
                   color: "#fff",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  overflow: "hidden",
+                  border: userAvatar ? "1.5px solid rgba(204,255,0,0.4)" : "none",
+                  boxShadow: userAvatar ? "0 0 12px rgba(204,255,0,0.2)" : "none",
                   transition: "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease",
                 }}
-                title="Your Profile & Account Settings"
+                title={`${userName} — Profile & Account Settings`}
               >
-                K
+                {userAvatar ? (
+                  <img
+                    src={userAvatar}
+                    alt={userName}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }}
+                  />
+                ) : (
+                  userInitial
+                )}
               </Link>
             </div>
           </header>
