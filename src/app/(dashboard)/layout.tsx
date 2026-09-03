@@ -144,12 +144,31 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             ))}
           </nav>
           <div className="sidebar-footer">
-            <Link href="/login" className="sidebar-link" onClick={() => {
-              document.cookie = "demo_mode=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-            }}>
+            <button
+              className="sidebar-link"
+              style={{ width: "100%", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
+              onClick={async () => {
+                try {
+                  // Clear demo cookie
+                  document.cookie = "demo_mode=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+                  // Clear local storage session data
+                  localStorage.removeItem("trainiq_user_fullname");
+                  localStorage.removeItem("trainiq_user_avatar");
+                  localStorage.removeItem("fitnessgpt_onboarded");
+                  // Sign out from Supabase (clears the auth cookie)
+                  const supabase = createClient();
+                  await supabase.auth.signOut();
+                } catch (err) {
+                  console.error("Sign out error:", err);
+                } finally {
+                  // Hard-redirect so the proxy re-evaluates the cleared session
+                  window.location.href = "/login";
+                }
+              }}
+            >
               <LogOut size={20} className="icon" />
               Sign Out / Switch Account
-            </Link>
+            </button>
           </div>
         </aside>
 
