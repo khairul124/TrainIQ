@@ -96,7 +96,7 @@ export function OnboardingAgent() {
         style={{
           position: "fixed",
           bottom: 28,
-          left: 28,
+          right: 28,
           zIndex: 900,
           background: "#1A1A2E",
           border: "1px solid var(--accent-purple)",
