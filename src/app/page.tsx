@@ -22,7 +22,6 @@ import {
   RotateCcw,
   Zap,
 } from "lucide-react";
-import { SplineScene } from "@/components/SplineScene";
 
 // Goal selector data for Section 11
 interface GoalData {
@@ -210,53 +209,32 @@ export default function TrainIQLandingPage() {
         </div>
 
         <div className="hero-content-wrapper">
-          <div className="hero-split-grid">
-            {/* Left Column: Editorial Headline & Actions */}
-            <div className="hero-text-col">
-              <div className="hero-meta">
-                <span className="section-index-tag">01 / TRAINIQ</span>
-                <div className="live-indicator">
-                  <span className="live-dot" />
-                  <span>AI COACH ACTIVE &bull; 3D PERFORMANCE ENGINE</span>
-                </div>
-              </div>
-
-              <h1 className="hero-headline">
-                TRAIN SMARTER.<br />
-                <span className="hero-headline-accent">PERFORM BETTER.</span>
-              </h1>
-
-              <p className="hero-subtext">
-                An AI-powered fitness platform built around your workouts, nutrition,
-                recovery, and real performance data. Your training. Your data. Your edge.
-              </p>
-
-              <div className="hero-cta-group">
-                <Link href="/signup" className="btn-hero-primary">
-                  <span>START TRAINING</span>
-                  <ArrowRight size={17} />
-                </Link>
-                <a href="#problem" className="btn-hero-secondary">
-                  <span>EXPLORE TRAINIQ</span>
-                </a>
-              </div>
+          <div className="hero-meta">
+            <span className="section-index-tag">01 / TRAINIQ</span>
+            <div className="live-indicator">
+              <span className="live-dot" />
+              <span>AI COACH ACTIVE &bull; PERFORMANCE ENGINE READY</span>
             </div>
+          </div>
 
-            {/* Right Column: Interactive 3D Spline Element */}
-            <div className="hero-3d-col">
-              <div className="hero-3d-card">
-                <div className="hero-3d-pill">
-                  <Sparkles size={13} style={{ color: "#CCFF00" }} />
-                  <span>INTERACTIVE 3D &bull; DRAG TO ROTATE</span>
-                </div>
-                <div className="hero-3d-viewport">
-                  <SplineScene
-                    scene="https://prod.spline.design/KjVzqfdAdnWxDJ-I/scene.splinecode"
-                    className="hero-spline-canvas"
-                  />
-                </div>
-              </div>
-            </div>
+          <h1 className="hero-headline">
+            TRAIN SMARTER.<br />
+            <span className="hero-headline-accent">PERFORM BETTER.</span>
+          </h1>
+
+          <p className="hero-subtext">
+            An AI-powered fitness platform built around your workouts, nutrition,
+            recovery, and real performance data. Your training. Your data. Your edge.
+          </p>
+
+          <div className="hero-cta-group">
+            <Link href="/signup" className="btn-hero-primary">
+              <span>START TRAINING</span>
+              <ArrowRight size={17} />
+            </Link>
+            <a href="#problem" className="btn-hero-secondary">
+              <span>EXPLORE TRAINIQ</span>
+            </a>
           </div>
 
           {/* Quick Metrics Ticker at bottom of hero */}
@@ -1438,96 +1416,17 @@ export default function TrainIQLandingPage() {
         .hero-content-wrapper {
           position: relative;
           z-index: 2;
-          max-width: 1320px;
+          max-width: 1280px;
           margin: 0 auto;
           padding: 0 32px;
           width: 100%;
         }
 
-        .hero-split-grid {
-          display: grid;
-          grid-template-columns: 1.12fr 0.88fr;
-          gap: 48px;
-          align-items: center;
-          width: 100%;
-          margin-bottom: 48px;
-        }
-
-        .hero-text-col {
-          display: flex;
-          flex-direction: column;
-          z-index: 3;
-        }
-
-        .hero-3d-col {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          width: 100%;
-          z-index: 3;
-        }
-
-        .hero-3d-card {
-          width: 100%;
-          height: 520px;
-          min-height: 480px;
-          position: relative;
-          background: rgba(14, 14, 18, 0.4);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
-          overflow: hidden;
-          backdrop-filter: blur(14px);
-          -webkit-backdrop-filter: blur(14px);
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 30px rgba(204, 255, 0, 0.08);
-          transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .hero-3d-card:hover {
-          border-color: rgba(204, 255, 0, 0.35);
-          box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 36px rgba(204, 255, 0, 0.15);
-        }
-
-        .hero-3d-pill {
-          position: absolute;
-          top: 16px;
-          right: 16px;
-          z-index: 10;
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          padding: 5px 12px;
-          background: rgba(8, 8, 12, 0.8);
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          border-radius: 20px;
-          font-size: 0.72rem;
-          font-weight: 700;
-          color: #CCFF00;
-          letter-spacing: 0.08em;
-          backdrop-filter: blur(12px);
-          pointer-events: none;
-        }
-
-        .hero-3d-viewport {
-          width: 100%;
-          height: 100%;
-          cursor: grab;
-        }
-
-        .hero-3d-viewport:active {
-          cursor: grabbing;
-        }
-
-        .hero-spline-canvas {
-          width: 100% !important;
-          height: 100% !important;
-        }
-
         .hero-meta {
           display: flex;
           align-items: center;
-          gap: 20px;
-          margin-bottom: 20px;
+          gap: 24px;
+          margin-bottom: 24px;
         }
 
         .live-indicator {
@@ -1555,12 +1454,12 @@ export default function TrainIQLandingPage() {
 
         .hero-headline {
           font-family: var(--font-heading, "Outfit", sans-serif);
-          font-size: clamp(2.8rem, 5.2vw, 5.4rem);
+          font-size: clamp(3.2rem, 7.8vw, 7.2rem);
           font-weight: 800;
-          line-height: 0.98;
+          line-height: 0.96;
           letter-spacing: -0.04em;
           color: #F5F5F2;
-          margin-bottom: 24px;
+          margin-bottom: 28px;
           text-transform: uppercase;
         }
 
@@ -1570,18 +1469,19 @@ export default function TrainIQLandingPage() {
         }
 
         .hero-subtext {
-          font-size: clamp(1.02rem, 1.4vw, 1.2rem);
+          font-size: clamp(1.05rem, 1.6vw, 1.35rem);
           color: #A1A1A8;
-          max-width: 600px;
+          max-width: 740px;
           line-height: 1.6;
-          margin-bottom: 36px;
+          margin-bottom: 40px;
         }
 
         .hero-cta-group {
           display: flex;
           align-items: center;
-          gap: 16px;
+          gap: 18px;
           flex-wrap: wrap;
+          margin-bottom: 64px;
         }
 
         .btn-hero-primary {
@@ -2872,17 +2772,6 @@ export default function TrainIQLandingPage() {
         /* ============================================================ */
 
         @media (max-width: 1024px) {
-          .hero-split-grid {
-            grid-template-columns: 1fr;
-            gap: 36px;
-            margin-bottom: 36px;
-          }
-
-          .hero-3d-card {
-            height: 420px;
-            min-height: 400px;
-          }
-
           .features-editorial-grid {
             grid-template-columns: repeat(2, 1fr);
           }
@@ -2911,17 +2800,6 @@ export default function TrainIQLandingPage() {
         @media (max-width: 768px) {
           .editorial-section {
             padding: 80px 0;
-          }
-
-          .hero-split-grid {
-            grid-template-columns: 1fr;
-            gap: 28px;
-            margin-bottom: 28px;
-          }
-
-          .hero-3d-card {
-            height: 320px;
-            min-height: 300px;
           }
 
           .nav-links,
